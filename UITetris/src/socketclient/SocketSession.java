@@ -17,14 +17,16 @@ import java.util.Enumeration;
 
 import org.json.JSONObject;
 
-public class SessionClienteSocket extends Thread {
+public class SocketSession extends Thread {
 
-    private static SessionClienteSocket INSTANCE;
+    private static SocketSession INSTANCE;
 
-    public static SessionClienteSocket getInstance(String ip) {
-        if (INSTANCE == null) {
+    public static SocketSession getInstance(String ip) {
+        if (ip.equals("mesaje")) {
+            return INSTANCE;
+        } else {
+            INSTANCE = new SocketSession(ip, 5000);
         }
-        INSTANCE = new SessionClienteSocket(ip, 5000);
         return INSTANCE;
     }
 
@@ -77,6 +79,7 @@ public class SessionClienteSocket extends Thread {
         }
     }
 
+//////// Fin de Atributo y Metodos Staticos
     private boolean isRun;
     private BufferedReader request;
     private PrintWriter response;
@@ -85,11 +88,11 @@ public class SessionClienteSocket extends Thread {
 
     Socket socket;
 
-    public SessionClienteSocket(String ip, int puerto) {
+    public SocketSession(String ip, int puerto) {
         observed = new PropertyChangeSupport(this);
         try {
             socket = new Socket();
-            socket.connect(new InetSocketAddress(ip, puerto), 5);
+            socket.connect(new InetSocketAddress(ip, puerto), 10);
             isRun = true;
             this.start();
         } catch (Exception e) {
@@ -148,7 +151,8 @@ public class SessionClienteSocket extends Thread {
     }
 
     public void onMensaje(String line) {
-        // JSONObject obj = new JSONObject(line);
+        JSONObject obj = new JSONObject(line);
+        new ControllerSession(obj, this, observed);
     }
 
     public void sendString(String line) {

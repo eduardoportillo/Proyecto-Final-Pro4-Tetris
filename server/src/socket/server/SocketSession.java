@@ -15,14 +15,14 @@ import java.util.Base64;
 import org.json.JSONObject;
 
 import socket.ControllerSesion;
-import socket.server.Sesion;
+import socket.server.ListaSesiones;
 
 // import view.Frame;
 
-public class SocketSesion extends Thread {
+public class SocketSession extends Thread {
     private Socket socket;
     private boolean isRun;
-    private SocketSesion instance;
+    private SocketSession instance;
     private String key;
     private BufferedReader request;
     private ObjectInputStream requestObject;
@@ -34,11 +34,11 @@ public class SocketSesion extends Thread {
 
     // private Frame frame;
 
-    public SocketSesion(Socket socketP, PropertyChangeSupport observed) {
+    public SocketSession(Socket socketP, PropertyChangeSupport observed) {
         this.observed = observed;
         this.instance = this;
         this.socket = socketP;
-        Sesion.getListasessiones().add(this);
+        ListaSesiones.getListasessiones().add(this);
         String adr = socketP.getRemoteSocketAddress().toString();
         key = adr;
         this.start();
@@ -67,7 +67,7 @@ public class SocketSesion extends Thread {
                     onMensaje(line);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
                 // System.out.println(e.getLocalizedMessage());
                 isRun = false;
                 onClose();
@@ -78,7 +78,7 @@ public class SocketSesion extends Thread {
     
 
     public void onClose() {
-
+        System.out.println("Sesion Cerrada:: " +"IP CLIENT:" + socket.getInetAddress()+" PORT CLIENT: " + socket.getPort());
     }
 
     public void onOpen() {
@@ -97,7 +97,7 @@ public class SocketSesion extends Thread {
 
     public void onMensaje(String line) {
         JSONObject obj = new JSONObject(line);
-        new ControllerSesion(obj, this);
+        new ControllerSesion(obj, this, observed);
     }
 
     public void sendString(String line) {

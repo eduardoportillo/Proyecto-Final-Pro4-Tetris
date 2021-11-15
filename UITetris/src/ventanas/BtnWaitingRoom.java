@@ -4,6 +4,8 @@
  */
 package ventanas;
 
+import waitingroomUI.WaitingRoomFrame;
+
 /**
  *
  * @author Portillo
@@ -67,7 +69,10 @@ public class BtnWaitingRoom extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        System.out.println("Ingresando a una sala de espera");
+        System.out.println("Ingresando a una sala de espera...");
+        WaitingRoomChat WRC = new WaitingRoomChat();
+        WRC.setVisible(true);
+        //Dispose a JFrame Padre no a btnWaitingRoom 
     }//GEN-LAST:event_jLabel1MouseClicked
 
 

@@ -46,8 +46,7 @@ public class ServerS extends Thread {
         while (isRun) {
             try {
                 Socket sockeNewConexion = INSTANCE.serverSocket.accept();
-                // fespera.dispose();
-                new SocketSesion(sockeNewConexion, observed);
+                new SocketSession(sockeNewConexion, observed);
             } catch (Exception e) {
 
             }

@@ -65,7 +65,7 @@ public class Login extends javax.swing.JFrame {
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 100, 40));
 
-        labelIpServer.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 16)); // NOI18N
+        labelIpServer.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 14)); // NOI18N
         labelIpServer.setForeground(new java.awt.Color(255, 255, 255));
         labelIpServer.setToolTipText("");
         getContentPane().add(labelIpServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 340, -1));
@@ -86,6 +86,7 @@ public class Login extends javax.swing.JFrame {
         client.setNameClienteSesion(nombreTF.getText());
         Lobby lobby = new Lobby();
         lobby.setVisible(true);
+        this.dispose();
         
 //        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed

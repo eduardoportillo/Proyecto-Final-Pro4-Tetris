@@ -7,12 +7,12 @@ public class Client {
     private String serverIp;
 
     public Client(){
-        serverIp= SessionClienteSocket.buscarServer();
+        serverIp= SocketSession.buscarServer();
         JSONObject jsonMensaje = new JSONObject();
         jsonMensaje.put("componet", "cliente");
         jsonMensaje.put("type", "registrarNombre");
         jsonMensaje.put("nombreSesion", nameClienteSesion);
-        SessionClienteSocket.getInstance(serverIp).sendString(jsonMensaje.toString());
+        SocketSession.getInstance(serverIp).sendString(jsonMensaje.toString());
     }
 
     public void setServerIp(String serverIp) {
