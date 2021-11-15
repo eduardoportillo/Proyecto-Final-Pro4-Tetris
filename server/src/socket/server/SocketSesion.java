@@ -83,7 +83,7 @@ public class SocketSesion extends Thread {
 
     public void onOpen() {
         System.out.println("Nueva session iniciada con exito:::");
-        System.out.println("IP:" + socket.getInetAddress());
+        System.out.println("IP CLIENT:" + socket.getInetAddress());
         System.out.println("PORT CLIENT:" + socket.getPort());
         observed.firePropertyChange("socketSession", "open", "msns");
 
