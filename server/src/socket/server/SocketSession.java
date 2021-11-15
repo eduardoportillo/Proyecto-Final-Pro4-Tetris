@@ -55,7 +55,6 @@ public class SocketSession extends Thread {
             return;
         }
         isRun = true;
-        onOpen();
         String line;
         while (isRun) {
             try {
@@ -78,15 +77,13 @@ public class SocketSession extends Thread {
     
 
     public void onClose() {
-        System.out.println("Sesion Cerrada:: " +"IP CLIENT:" + socket.getInetAddress()+" PORT CLIENT: " + socket.getPort());
+        System.out.println("Sesion Cerrada:: "+"Nombre Usuario: " + SesionName +" | IP CLIENT:" + socket.getInetAddress()+" | PORT CLIENT: " + socket.getPort());
     }
 
     public void onOpen() {
         System.out.println("Nueva session iniciada con exito:::");
-        System.out.println("IP CLIENT:" + socket.getInetAddress());
-        System.out.println("PORT CLIENT:" + socket.getPort());
+        System.out.println( "Nombre Usuario: " + SesionName + " | IP CLIENT: " + socket.getInetAddress() +" | PORT CLIENT: " + socket.getPort());
         observed.firePropertyChange("socketSession", "open", "msns");
-
     }
 
     @Override

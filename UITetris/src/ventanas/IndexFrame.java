@@ -51,7 +51,9 @@ public class IndexFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void singelPlayerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_singelPlayerMouseClicked
-        System.out.println("MousePreset singelPlayerMouseClicked");
+        FrameTetris tetris = new FrameTetris();
+        tetris.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_singelPlayerMouseClicked
 
     private void multiPlayerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_multiPlayerMouseClicked

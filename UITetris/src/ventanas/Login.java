@@ -3,17 +3,16 @@ package ventanas;
 import socketclient.Client;
 
 public class Login extends javax.swing.JFrame {
-    
+
     Client client = null;
-    
+
     public Login() {
         initComponents();
         this.setSize(360, 490);
         this.setLocationRelativeTo(null);
         client = new Client();
         intLabelIpServer(client.getServerIp());
-        
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -24,8 +23,9 @@ public class Login extends javax.swing.JFrame {
         login = new javax.swing.JLabel();
         nombreTF = new javax.swing.JTextField();
         nombre = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
         labelIpServer = new javax.swing.JLabel();
+        nameError = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -57,18 +57,21 @@ public class Login extends javax.swing.JFrame {
         nombre.setText("Nombre:");
         getContentPane().add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 130, 30));
 
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 100, 40));
+        getContentPane().add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 100, 40));
 
         labelIpServer.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 14)); // NOI18N
         labelIpServer.setForeground(new java.awt.Color(255, 255, 255));
         labelIpServer.setToolTipText("");
         getContentPane().add(labelIpServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 340, -1));
+
+        nameError.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
+        getContentPane().add(nameError, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 320, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondologin.png"))); // NOI18N
@@ -81,20 +84,23 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_nombreTFActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
-        client.setNameClienteSesion(nombreTF.getText());
-        Lobby lobby = new Lobby();
-        lobby.setVisible(true);
-        this.dispose();
-        
-//        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-    
+        if (nombreTF.getText().isEmpty()) {
+            nameError.setText("El nombre Esta Vacio, Por Favor Escriba uno!!!");
+        } else {
+            client.setNameClienteSesion(nombreTF.getText());
+            Lobby lobby = new Lobby();
+            lobby.setVisible(true);
+            this.dispose();
+        }
+
+    }//GEN-LAST:event_btnLoginActionPerformed
+
     public void intLabelIpServer(String ipServer) {
         labelIpServer.setText("El servidor se encuentra en el Host: " + ipServer);
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -131,11 +137,12 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogin;
     private javax.swing.JLabel imgAvatar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel labelIpServer;
     private javax.swing.JLabel login;
+    private javax.swing.JLabel nameError;
     private javax.swing.JLabel nombre;
     private javax.swing.JTextField nombreTF;
     // End of variables declaration//GEN-END:variables

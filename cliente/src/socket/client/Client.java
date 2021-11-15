@@ -9,9 +9,9 @@ public class Client {
     public Client(){
         serverIp= SessionClienteSocket.buscarServer();
         JSONObject jsonMensaje = new JSONObject();
-        jsonMensaje.put("componet", "cliente");
-        jsonMensaje.put("type", "registrarNombre");
-        jsonMensaje.put("nombreSesion", nameClienteSesion);
+        // jsonMensaje.put("componet", "cliente");
+        jsonMensaje.put("type", "RegistrarNombre");
+        jsonMensaje.put("NombreSesion", nameClienteSesion);
         SessionClienteSocket.getInstance(serverIp).sendString(jsonMensaje.toString());
     }
 

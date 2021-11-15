@@ -4,8 +4,6 @@
  */
 package ventanas;
 
-import waitingroomUI.WaitingRoomFrame;
-
 /**
  *
  * @author Portillo

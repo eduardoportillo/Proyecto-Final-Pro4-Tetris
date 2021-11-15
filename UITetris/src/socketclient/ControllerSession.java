@@ -12,11 +12,11 @@ import org.json.JSONObject;
 public class ControllerSession {
 
     public ControllerSession(JSONObject json, SocketSession sesion, PropertyChangeSupport observed) {
-        switch (json.getString("type")) {
+        switch (json.getString("Type")) {
 
-            case "chat":
+            case "Chat":
         try {
-                byte[] data = Base64.getDecoder().decode(json.getString("mensaje"));
+                byte[] data = Base64.getDecoder().decode(json.getString("Mensaje"));
                 ObjectInputStream ois;
                 ois = new ObjectInputStream(new ByteArrayInputStream(data));
                 Mensaje msn = (Mensaje) ois.readObject();
