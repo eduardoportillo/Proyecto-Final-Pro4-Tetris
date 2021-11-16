@@ -92,7 +92,7 @@ public class SocketSession extends Thread {
         observed = new PropertyChangeSupport(this);
         try {
             socket = new Socket();
-            socket.connect(new InetSocketAddress(ip, puerto), 10);
+            socket.connect(new InetSocketAddress(ip, puerto), 100);
             isRun = true;
             this.start();
         } catch (Exception e) {

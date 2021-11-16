@@ -8,6 +8,7 @@ import java.util.Base64;
 import java.io.ObjectInputStream;
 import listas.ListaMensajes;
 import org.json.JSONObject;
+import ventanas.FrameTetris;
 
 public class ControllerSession {
 
@@ -26,7 +27,18 @@ public class ControllerSession {
                 break;
 
             case "DeleteWaitingRoom":
-                    observed.firePropertyChange("lobby", "", json);
+                observed.firePropertyChange("lobby", "", json);
+                break;
+
+            case "StartGame":
+                FrameTetris tetris = new FrameTetris(json.getString("idGame"));
+                break;
+
+            case "completeLine":
+                observed.firePropertyChange("lobby", "", json);
+                break;
+            case "endGame":
+                System.out.println("el juego acabo");
                 break;
 
             case "Chat":

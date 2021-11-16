@@ -3,12 +3,19 @@ package tetris;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 
 import javax.swing.JOptionPane;
+import org.json.JSONObject;
+import socketclient.SocketSession;
+import ventanas.BtnWaitingRoom;
 
-public class Tetris extends Panel implements KeyListener {
+public class Tetris extends Panel implements KeyListener, PropertyChangeListener {
 
+    public String idGame;
+    JSONObject jsonFinDelJuego;
     // Dimensiones del tablero
     private int heightTablero = 22;
     private int widthTablero = 10;
@@ -53,7 +60,10 @@ public class Tetris extends Panel implements KeyListener {
 
     private boolean juegoFinalizado = false;
 
-    public Tetris() {
+    public Tetris(String idGame) {
+        this.jsonFinDelJuego = new JSONObject();
+        this.idGame = idGame;
+        SocketSession.getInstance("mensaje").addObserver(this);
         addKeyListener(this);
         if (multiplayer == false) {
             timer.scheduleAtFixedRate(mover, 1000, 1);
@@ -75,13 +85,13 @@ public class Tetris extends Panel implements KeyListener {
 //            }
         }
     }
+        
 
     private Timer timer = new Timer();
     private TimerTask mover = new TimerTask() {
-
         @Override
         public void run() {
-
+            final String id_game = idGame;
             if (juegoFinalizado) {
                 return;
             }
@@ -111,6 +121,9 @@ public class Tetris extends Panel implements KeyListener {
                         }
                     }
                     if (juegoFinalizado) {
+                        jsonFinDelJuego.put("type", "loseGame");
+                        jsonFinDelJuego.put("idGame", id_game);
+                        SocketSession.getInstance("mensaje").sendString(jsonFinDelJuego.toString());
                         JOptionPane.showMessageDialog(null, "JUEGO FINALIZADO -- Q PARA SALIR; R PARA REINICIAR");
                     }
 
@@ -174,6 +187,11 @@ public class Tetris extends Panel implements KeyListener {
                     }
                 }
             }
+            JSONObject jsonSendLinea = new JSONObject();
+            jsonSendLinea.put("type", "completeLine");
+            jsonSendLinea.put("idGame", this.idGame);
+            SocketSession.getInstance("mensaje").sendString(jsonSendLinea.toString());
+
             lineasDespejadas++;
         }
     }
@@ -259,7 +277,10 @@ public class Tetris extends Panel implements KeyListener {
         // graficos.drawString("PAUSADO", 10, 30);
         // }
         if (juegoFinalizado) {
-            JOptionPane.showMessageDialog(null, "JUEGO FINALIZADO -- Q PARA SALIR; R PARA REINICIAR");
+            jsonFinDelJuego.put("type", "loseGame");
+            jsonFinDelJuego.put("idGame", this.idGame);
+            SocketSession.getInstance("mensaje").sendString(jsonFinDelJuego.toString());
+          //  JOptionPane.showMessageDialog(null, "JUEGO FINALIZADO -- Q PARA SALIR; R PARA REINICIAR");
         }
         graficos.drawString("SIGUIENTE", 300, 50);
 
@@ -496,5 +517,15 @@ public class Tetris extends Panel implements KeyListener {
 
     private final int[][] moverFila2 = {{0, 0, 0, -1, +2}, {0, 0, 0, +2, -1}, {0, 0, 0, +2, -1},
     {0, 0, 0, +1, -2}, {0, 0, 0, +1, -2}, {0, 0, 0, -2, +1}, {0, 0, 0, -2, +1}, {0, 0, 0, -1, +2}};
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        JSONObject jsonWR = (JSONObject) evt.getNewValue();
+        switch (jsonWR.getString("type")) {
+            case "completeLine":
+
+                break;
+        }
+    }
 
 }

@@ -71,12 +71,12 @@ public class BtnWaitingRoom extends javax.swing.JPanel {
 
     private void nombreSalaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nombreSalaMouseClicked
         System.out.println("Ingresando a una sala de espera...");
+        WaitingRoomChat WRC = new WaitingRoomChat(this.id);
         JSONObject sendSessinoWR = new JSONObject();
         sendSessinoWR.put("type", "SendSessionWR");
         sendSessinoWR.put("WRId", this.id);
         SocketSession.getInstance("mensaje").sendString(sendSessinoWR.toString());
-        
-        WaitingRoomChat WRC = new WaitingRoomChat();
+
         WRC.setVisible(true);
         JFPadre.dispose();
     }//GEN-LAST:event_nombreSalaMouseClicked

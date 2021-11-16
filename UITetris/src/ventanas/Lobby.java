@@ -119,12 +119,14 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
                     HMbtnWaitingRoom.put(jsonWR.getJSONObject("newWaitingRoom").getString("WRId"), NWR);
                     NWR.getNombreSala().setText("Sala de: " + jsonWR.getJSONObject("newWaitingRoom").getString("ownerName"));
                     posY += 60;
+                    this.repaint();
                     this.validate();
                 break;
 
             case "GetWaitingRooms":
                 for (int i = 0; i < jsonWR.getJSONArray("listaWR").length(); i++) {
                     LobbyPanel.removeAll();
+                    posY = 30;
                     JSONObject listaWR = jsonWR.getJSONArray("listaWR").getJSONObject(i);
                     BtnWaitingRoom BWR = new BtnWaitingRoom(listaWR.getString("WRId"), this);
                     HMbtnWaitingRoom.put(listaWR.getString("WRId"), BWR);
@@ -132,6 +134,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
                     BWR.getNombreSala().setText("Sala de: " + listaWR.getString("ownerName"));
 //                      BWR.getNombreSala().setText("Jugadores Online: "+listaWR.getString(""));
                     posY += 60;
+                      this.repaint();
                     this.validate();
                 }
                 break;

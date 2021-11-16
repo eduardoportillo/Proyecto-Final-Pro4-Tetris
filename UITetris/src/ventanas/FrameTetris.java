@@ -7,15 +7,16 @@ import tetris.Tetris;
 public class FrameTetris extends Frame {
 
     private Tetris tetris;
-
-    public FrameTetris() {
+    private String idGame;
+    public FrameTetris(String idGame) {
+        this.idGame = idGame;
         setSize(400, 600);
         setResizable(true);
         // this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         // setUndecorated(true);
         setLocationRelativeTo(null);
 
-        tetris = new Tetris();
+        tetris = new Tetris(idGame);
         add(tetris);
 
         setVisible(true);

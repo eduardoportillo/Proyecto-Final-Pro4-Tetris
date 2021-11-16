@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Base64;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import listas.ListaMensajes;
@@ -16,8 +17,9 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
 
     JSONObject jsonSendMensaje;
     JSONObject jsonWRC;
-
-    public WaitingRoomChat() {
+    String WRId;
+    public WaitingRoomChat(String WRId) {
+        this.WRId =WRId;
         initComponents();
         this.setLocationRelativeTo(null);
         SocketSession.getInstance("mensaje").addObserver(this);
@@ -40,6 +42,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         enviarImagen = new javax.swing.JButton();
         jugadorListo = new javax.swing.JCheckBox();
         mensajeError = new javax.swing.JLabel();
+        start = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sala De Espera");
@@ -66,11 +69,6 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         jListSesiones.setBackground(new java.awt.Color(204, 0, 204));
         jListSesiones.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 18)); // NOI18N
         jListSesiones.setForeground(new java.awt.Color(255, 255, 255));
-        jListSesiones.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "a" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jListSesiones.setAlignmentX(20.0F);
         jScrollPane2.setViewportView(jListSesiones);
 
@@ -135,6 +133,13 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         mensajeError.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         mensajeError.setForeground(new java.awt.Color(255, 0, 0));
 
+        start.setText("start");
+        start.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout sendMensajePanelLayout = new javax.swing.GroupLayout(sendMensajePanel);
         sendMensajePanel.setLayout(sendMensajePanelLayout);
         sendMensajePanelLayout.setHorizontalGroup(
@@ -142,9 +147,12 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
             .addGroup(sendMensajePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TFMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(mensajeError, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(sendMensajePanelLayout.createSequentialGroup()
+                        .addComponent(mensajeError, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(start, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TFMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(sendMensajePanelLayout.createSequentialGroup()
                         .addComponent(enviarMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -164,7 +172,8 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                 .addGap(10, 10, 10)
                 .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jugadorListo)
-                    .addComponent(mensajeError))
+                    .addComponent(mensajeError)
+                    .addComponent(start))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -279,6 +288,13 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         }
     }//GEN-LAST:event_jugadorListoActionPerformed
 
+    private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
+        JSONObject jsonStartGame = new JSONObject();
+        jsonStartGame.put("type", "StartGame");
+        jsonStartGame.put("WRId", this.WRId);
+        SocketSession.getInstance("mensaje").sendString(jsonStartGame.toString());
+    }//GEN-LAST:event_startActionPerformed
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -298,8 +314,9 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
+            private String WRId;
             public void run() {
-                new WaitingRoomChat().setVisible(true);
+                new WaitingRoomChat(this.WRId).setVisible(true);
             }
         });
     }
@@ -318,6 +335,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     private javax.swing.JCheckBox jugadorListo;
     private javax.swing.JLabel mensajeError;
     private javax.swing.JPanel sendMensajePanel;
+    private javax.swing.JButton start;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -327,12 +345,17 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         switch (jsonWRC.getString("type")) {
             case "GetSesionesWR":
                 System.out.println(jsonWRC);
-                String[] modelo;
-//                for (int i = 0; i < jsonWRC.; i++) {
-//
-//                }
-//                jListSesiones.setModel(modelo);
+                DefaultListModel model = new DefaultListModel();
+
+                for (int i = 0; i < jsonWRC.getJSONArray("sessionesWR").length(); i++) {
+                    model.addElement( jsonWRC.getJSONArray("sessionesWR").getJSONObject(i).getString("SesionName"));
+
+                }
+                jListSesiones.setModel(model);
+                this.repaint();
+                this.validate();
                 break;
+
             default:
                 break;
         }
