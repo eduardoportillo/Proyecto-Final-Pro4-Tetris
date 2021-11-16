@@ -63,29 +63,17 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
     public Tetris(String idGame) {
         this.jsonFinDelJuego = new JSONObject();
         this.idGame = idGame;
-        SocketSession.getInstance("mensaje").addObserver(this);
+
         addKeyListener(this);
-        if (multiplayer == false) {
+
+        if (multiplayer == true) { // [ ] implementar multijugador
+            SocketSession.getInstance("mensaje").addObserver(this);
+            timer.scheduleAtFixedRate(mover, 1000, 1);
+        } else {
             timer.scheduleAtFixedRate(mover, 1000, 1);
         }
 
-        if (multiplayer == true) { // [ ] implementar multijugador
-//            t.scheduleAtFixedRate(mover, 1000, 1);
-//            this.id = id;
-//
-//            try {
-//                //Creamos el socket con el host y el puerto, declaramos los streams de comunicacion
-//                //InetAddress ip = InetAddress.getByName(host); // host IPaddress
-//                cliente = new Socket(host, puerto);
-//
-//                in = new DataInputStream(cliente.getInputStream());
-//                out = new DataOutputStream(cliente.getOutputStream());
-//            } catch (IOException ex) {
-//                Logger.getLogger(Tetris.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-        }
     }
-        
 
     private Timer timer = new Timer();
     private TimerTask mover = new TimerTask() {
@@ -162,7 +150,7 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
                 if (cnt == 10) {
                     indice = j;
                     if (multiplayer == true) { // [ ] implementar en multijugado
-//                        enviarPiso();
+                        enviarPiso();
                     }
                     break;
                 }
@@ -194,6 +182,29 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
 
             lineasDespejadas++;
         }
+    }
+
+    public void enviarPiso() { // [ ] implementar enviarPiso()
+        JSONObject jsonSendLinea = new JSONObject();
+        jsonSendLinea.put("type", "completeLine");
+        jsonSendLinea.put("idGame", this.idGame);
+        SocketSession.getInstance("mensaje").sendString(jsonSendLinea.toString());
+    }
+
+    protected void añadirPiso(int lineas) { // [ ] implementar añadirPiso()
+        for (int i = 0; i < heightTablero; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (tablero[i][j] != 0 && i - lineas < 0) {
+                    juegoFinalizado = true;
+                } else if (i - lineas >= 0) {
+                    tablero[i - lineas][j] = tablero[i][j];
+                }
+            }
+        }
+        if (heightTablero > 0) {
+            heightTablero--;
+        }
+        repaint();
     }
 
     // ajustar el nivel según el número de líneas despejadas
@@ -280,7 +291,7 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
             jsonFinDelJuego.put("type", "loseGame");
             jsonFinDelJuego.put("idGame", this.idGame);
             SocketSession.getInstance("mensaje").sendString(jsonFinDelJuego.toString());
-          //  JOptionPane.showMessageDialog(null, "JUEGO FINALIZADO -- Q PARA SALIR; R PARA REINICIAR");
+            //  JOptionPane.showMessageDialog(null, "JUEGO FINALIZADO -- Q PARA SALIR; R PARA REINICIAR");
         }
         graficos.drawString("SIGUIENTE", 300, 50);
 
@@ -457,52 +468,6 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
         }
     }
 
-//    // [ ] implementar en multiplayer
-//    public void enviarPiso() { // [ ] implementar enviarPiso()
-//        String dato = "" + id;
-//        try {
-//            out.writeUTF(dato);
-//        } catch (IOException ex) {
-//            Logger.getLogger(Tetris.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-//    // añade un piso al otro jugador
-//    protected void añadirPiso(int lineas) { // [ ] implementar añadirPiso()
-//        for (int i = 0; i < altura; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (grid[i][j] != 0 && i - lineas < 0) {
-//                    juegoFinalizado = true;
-//                } else if (i - lineas >= 0) {
-//                    grid[i - lineas][j] = grid[i][j];
-//                }
-//            }
-//        }
-//        if (altura > 0) {
-//            altura--;
-//        }
-//        repaint();
-//    }
-//
-//    @Override
-//    public void run() { // [ ] implementar run() Runneable en multijuador
-//        try {
-//            mensaje = in.readUTF();
-//            int aux = Integer.parseInt(mensaje);
-//            id = aux;
-//            //Ciclo infinito, para estar escuchando por los movimientos de los jugadores
-//            while (true) {
-//                //Recibimos el mensaje
-//                mensaje = in.readUTF();
-//                int aux1 = Integer.parseInt(mensaje);
-//                if (aux1 != id) {
-//                    añadirPiso(1);
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-    // 
     private final int[][] moverColumna1 = {{0, -1, -1, 0, -1}, {0, +1, +1, 0, +1}, {0, +1, +1, 0, +1},
     {0, +1, +1, 0, +1}, {0, +1, +1, 0, +1}, {0, -1, -1, 0, -1}, {0, -1, -1, 0, -1},
     {0, -1, -1, 0, -1}};
@@ -523,7 +488,9 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
         JSONObject jsonWR = (JSONObject) evt.getNewValue();
         switch (jsonWR.getString("type")) {
             case "completeLine":
-
+                if (!jsonWR.get(idGame).equals(this.idGame)) {
+                    añadirPiso(1);
+                }
                 break;
         }
     }

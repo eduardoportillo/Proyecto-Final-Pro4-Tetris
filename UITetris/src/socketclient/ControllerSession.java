@@ -31,6 +31,7 @@ public class ControllerSession {
                 break;
 
             case "StartGame":
+                observed.firePropertyChange("lobby", "", json);
                 FrameTetris tetris = new FrameTetris(json.getString("idGame"));
                 break;
 

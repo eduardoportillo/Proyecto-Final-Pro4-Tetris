@@ -293,6 +293,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         jsonStartGame.put("type", "StartGame");
         jsonStartGame.put("WRId", this.WRId);
         SocketSession.getInstance("mensaje").sendString(jsonStartGame.toString());
+        this.dispose();
     }//GEN-LAST:event_startActionPerformed
 
     public static void main(String args[]) {

@@ -4,6 +4,8 @@
  */
 package ventanas;
 
+import tetris.Tetris;
+
 public class IndexFrame extends javax.swing.JFrame {
 
     public IndexFrame() {
@@ -59,6 +61,7 @@ public class IndexFrame extends javax.swing.JFrame {
     private void multiPlayerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_multiPlayerMouseClicked
         Login login = new Login();
         login.setVisible(true);
+        Tetris.multiplayer = true;
         this.dispose();
     }//GEN-LAST:event_multiPlayerMouseClicked
 
