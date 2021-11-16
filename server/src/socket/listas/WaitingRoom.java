@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import socket.server.ServerS;
 import socket.server.SocketSession;
 
 public class WaitingRoom {
@@ -31,6 +32,10 @@ public class WaitingRoom {
         HMSessions.remove(sesion.getKey());
         if(HMSessions.size()<= 0 ){
             Lobby.getInstance().HMWaitingRoom.remove(this.getId());
+            JSONObject deleteWaitingRoom = new JSONObject();
+            deleteWaitingRoom.put("type", "DeleteWaitingRoom");
+            deleteWaitingRoom.put("WRId", this.getId());
+            ServerS.getInstanceServer().sendAll(deleteWaitingRoom.toString());
         }
     }
 

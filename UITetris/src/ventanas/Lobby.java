@@ -3,6 +3,7 @@ package ventanas;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import socketclient.Client;
@@ -106,6 +107,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
+    private HashMap<String, BtnWaitingRoom> HMbtnWaitingRoom = new HashMap();
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         jsonWR = (JSONObject) evt.getNewValue();
@@ -113,6 +115,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
             case "CreateWaitingRoom":
                     BtnWaitingRoom NWR = new BtnWaitingRoom(jsonWR.getJSONObject("newWaitingRoom").getString("WRId"));
                     LobbyPanel.add(NWR, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
+                    HMbtnWaitingRoom.put(jsonWR.getJSONObject("newWaitingRoom").getString("WRId"), NWR);
                     NWR.getNombreSala().setText("Sala de: " + jsonWR.getJSONObject("newWaitingRoom").getString("ownerName"));
                     posY += 60;
                     this.validate();
@@ -120,8 +123,10 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
 
             case "GetWaitingRooms":
                 for (int i = 0; i < jsonWR.getJSONArray("listaWR").length(); i++) {
+                    LobbyPanel.removeAll();
                     JSONObject listaWR = jsonWR.getJSONArray("listaWR").getJSONObject(i);
                     BtnWaitingRoom BWR = new BtnWaitingRoom(listaWR.getString("WRId"));
+                    HMbtnWaitingRoom.put(listaWR.getString("WRId"), BWR);
                     LobbyPanel.add(BWR, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
                     BWR.getNombreSala().setText("Sala de: " + listaWR.getString("ownerName"));
 //                      BWR.getNombreSala().setText("Jugadores Online: "+listaWR.getString(""));
@@ -129,6 +134,13 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
                     this.validate();
                 }
                 break;
+                
+                case "DeleteWaitingRoom":
+                    BtnWaitingRoom objBtnWaitingRoom = HMbtnWaitingRoom.get(jsonWR.getString("WRId"));
+                    LobbyPanel.remove(objBtnWaitingRoom);
+                    HMbtnWaitingRoom.remove(jsonWR.getString("WRId"));
+                    this.validate();
+                    break;
             default:
                 break;
         }
