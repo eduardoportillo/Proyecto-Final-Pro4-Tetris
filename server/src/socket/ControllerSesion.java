@@ -36,16 +36,25 @@ public class ControllerSesion {
             WaitingRoom waitingRoom = Lobby.getInstance().HMWaitingRoom.get(json.get("WRId"));
             waitingRoom.HMSessions.put(sesion.getKey(), sesion);
             sesion.setWaitingRoom(waitingRoom);
-            
+
             JSONObject jsonGetSesionesWR = new JSONObject();
             JSONArray sessionesWR = new JSONArray();
 
             jsonGetSesionesWR.put("type", "GetSesionesWR");
-            Lobby.getInstance().HMWaitingRoom.get(json.get("WRId")).HMSessions.forEach((k,v) ->  sessionesWR.put(v.toJson()));
+            Lobby.getInstance().HMWaitingRoom.get(json.get("WRId")).HMSessions
+                    .forEach((k, v) -> sessionesWR.put(v.toJson()));
             jsonGetSesionesWR.put("sessionesWR", sessionesWR);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             ServerS.getInstanceServer().sendAll(jsonGetSesionesWR.toString());
             break;
-
+        case "changeReady":
+            sesion.setIsReady(json.getBoolean("isReady"));
+            break;
         default:
             try {
                 byte[] data = Base64.getDecoder().decode(json.getString("Mensaje"));
@@ -70,6 +79,17 @@ public class ControllerSesion {
             } catch (ClassNotFoundException e) {
                 System.out.println("No se pudo parsear a MENSAJE");
             }
+            break;
+        case "StartGame":
+            String idWR = json.getString("WRId");
+            WaitingRoom wr = Lobby.getInstance().HMWaitingRoom.get(idWR);
+            wr.startGame();
+            break;
+        case "completeLine":
+            Game.games.get(json.getString("idGame")).completeLine(sesion);
+            break;
+        case "loseGame":
+            Game.games.get(json.getString("idGame")).loseGame(sesion);
             break;
         }
     }

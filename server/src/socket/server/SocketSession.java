@@ -27,8 +27,8 @@ public class SocketSession extends Thread {
     private String key;
     private BufferedReader request;
     private ObjectInputStream requestObject;
-    private WaitingRoom WRSocketSession; 
-
+    private WaitingRoom WRSocketSession;
+    private Boolean isReady;
     private String SesionName;
 
     private PrintWriter response;
@@ -69,7 +69,7 @@ public class SocketSession extends Thread {
                     onMensaje(line);
                 }
             } catch (Exception e) {
-                //e.printStackTrace();
+                // e.printStackTrace();
                 // System.out.println(e.getLocalizedMessage());
                 isRun = false;
                 onClose();
@@ -78,16 +78,18 @@ public class SocketSession extends Thread {
     }
 
     public void onClose() {
-        if(waitingRoom!=null){
+        if (waitingRoom != null) {
             waitingRoom.removeSesion(this);
         }
         ListaSesiones.getListasessiones().remove(this);
-        System.out.println("Sesion Cerrada:: "+"Nombre Usuario: " + SesionName +" | IP CLIENT:" + socket.getInetAddress()+" | PORT CLIENT: " + socket.getPort());
+        System.out.println("Sesion Cerrada:: " + "Nombre Usuario: " + SesionName + " | IP CLIENT:"
+                + socket.getInetAddress() + " | PORT CLIENT: " + socket.getPort());
     }
 
     public void onOpen() {
         System.out.println("Nueva session iniciada con exito:::");
-        System.out.println( "Nombre Usuario: " + SesionName + " | IP CLIENT: " + socket.getInetAddress() +" | PORT CLIENT: " + socket.getPort());
+        System.out.println("Nombre Usuario: " + SesionName + " | IP CLIENT: " + socket.getInetAddress()
+                + " | PORT CLIENT: " + socket.getPort());
         observed.firePropertyChange("socketSession", "open", "msns");
     }
 
@@ -120,10 +122,11 @@ public class SocketSession extends Thread {
         }
     }
 
-    public JSONObject toJson(){
+    public JSONObject toJson() {
         JSONObject jsonSS = new JSONObject();
         jsonSS.put("SocketId", instance.getKey());
         jsonSS.put("SesionName", this.getSesionName());
+        jsonSS.put("isReady", this.isReady);
         return jsonSS;
     }
 
@@ -157,5 +160,17 @@ public class SocketSession extends Thread {
 
     public void setWaitingRoom(WaitingRoom waitingRoom) {
         this.waitingRoom = waitingRoom;
+    }
+
+    public WaitingRoom getWaitingRoom() {
+        return waitingRoom;
+    }
+
+    public void setIsReady(Boolean isReady) {
+        this.isReady = isReady;
+    }
+
+    public Boolean getIsReady() {
+        return isReady;
     }
 }
