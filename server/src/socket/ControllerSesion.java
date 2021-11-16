@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Base64;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import socket.chat.Mensaje;
@@ -29,6 +30,20 @@ public class ControllerSesion {
 
         case "CreateWaitingRoom":
             new WaitingRoom(sesion);
+            break;
+
+        case "SendSessionWR":
+            WaitingRoom waitingRoom = Lobby.getInstance().HMWaitingRoom.get(json.get("WRId"));
+            waitingRoom.HMSessions.put(sesion.getKey(), sesion);
+            sesion.setWaitingRoom(waitingRoom);
+            
+            JSONObject jsonGetSesionesWR = new JSONObject();
+            JSONArray sessionesWR = new JSONArray();
+
+            jsonGetSesionesWR.put("type", "GetSesionesWR");
+            Lobby.getInstance().HMWaitingRoom.get(json.get("WRId")).HMSessions.forEach((k,v) ->  sessionesWR.put(v.toJson()));
+            jsonGetSesionesWR.put("sessionesWR", sessionesWR);
+            ServerS.getInstanceServer().sendAll(jsonGetSesionesWR.toString());
             break;
 
         default:

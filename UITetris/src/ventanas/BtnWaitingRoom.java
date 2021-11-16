@@ -1,12 +1,18 @@
 
 package ventanas;
 
+import java.util.UUID;
 import javax.swing.JLabel;
+import org.json.JSONObject;
+import socketclient.SocketSession;
 
 public class BtnWaitingRoom extends javax.swing.JPanel {
-
-    public BtnWaitingRoom() {
+    
+    private String id;
+    
+    public BtnWaitingRoom(String id) {
         initComponents();
+        this.id = id;
     }
 
     public JLabel getJugadoresOnline() {
@@ -63,6 +69,11 @@ public class BtnWaitingRoom extends javax.swing.JPanel {
 
     private void nombreSalaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nombreSalaMouseClicked
         System.out.println("Ingresando a una sala de espera...");
+        JSONObject sendSessinoWR = new JSONObject();
+        sendSessinoWR.put("type", "SendSessionWR");
+        sendSessinoWR.put("WRId", this.id);
+        SocketSession.getInstance("mensaje").sendString(sendSessinoWR.toString());
+        
         WaitingRoomChat WRC = new WaitingRoomChat();
         WRC.setVisible(true);
     }//GEN-LAST:event_nombreSalaMouseClicked

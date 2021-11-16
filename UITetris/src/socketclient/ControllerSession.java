@@ -21,6 +21,10 @@ public class ControllerSession {
                 observed.firePropertyChange("lobby", "", json);
                 break;
 
+            case "GetSesionesWR":
+                observed.firePropertyChange("lobby", "", json);
+                break;
+
             case "Chat":
                 try {
                 byte[] data = Base64.getDecoder().decode(json.getString("Mensaje"));

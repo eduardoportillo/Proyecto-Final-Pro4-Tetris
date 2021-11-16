@@ -1,11 +1,13 @@
 package socket.listas;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import socket.server.ServerS;
+import socket.server.SocketSession;
 
 public class Lobby {
     private static Lobby instance;
@@ -16,10 +18,12 @@ public class Lobby {
         return instance;
     }
 
-    public ArrayList<WaitingRoom> WaitingRoomList;
+    // public ArrayList<WaitingRoom> WaitingRoomList;
+
+    public HashMap<String,WaitingRoom> HMWaitingRoom;
 
     public Lobby(){
-        this.WaitingRoomList = new ArrayList<>();
+        this.HMWaitingRoom = new HashMap<>();
     }
 
     public JSONObject toJson(){
@@ -28,20 +32,20 @@ public class Lobby {
         JSONObject wrList = new JSONObject();
         wrList.put("type", "GetWaitingRooms");
 
-        for (int i = 0; i < instance.WaitingRoomList.size(); i++) {
-            listaWRs.put(instance.WaitingRoomList.get(i).toJson());
-        }
+        HMWaitingRoom.forEach((k,v) ->  listaWRs.put(v.toJson()));
 
         wrList.put("listaWR",listaWRs);
         return wrList;
     }
 
-    public void addWR(WaitingRoom watingRoom){
-        this.WaitingRoomList.add(watingRoom);
+    public void addWR(String id, WaitingRoom watingRoom){
+        // this.WaitingRoomList.add(watingRoom);
+
+        this.HMWaitingRoom.put(id, watingRoom);
 
         JSONObject newWR = new JSONObject();
         newWR.put("type", "CreateWaitingRoom");
-        newWR.put("newWaitingRoom", instance.WaitingRoomList.get(WaitingRoomList.size()-1).toJson());
+        newWR.put("newWaitingRoom", watingRoom.toJson());
         ServerS.getInstanceServer().sendAll(newWR.toString());
     }
     

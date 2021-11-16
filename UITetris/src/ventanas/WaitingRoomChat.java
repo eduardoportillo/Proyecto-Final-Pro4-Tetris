@@ -1,6 +1,8 @@
 package ventanas;
 
 import chat.Mensaje;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Base64;
@@ -10,12 +12,13 @@ import listas.ListaMensajes;
 import org.json.JSONObject;
 import socketclient.SocketSession;
 
-public class WaitingRoomChat extends javax.swing.JFrame {
+public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChangeListener{
     JSONObject jsonSendMensaje;
-    
+    JSONObject jsonWRC;
     public WaitingRoomChat() {
         initComponents();
         this.setLocationRelativeTo(null);
+        SocketSession.getInstance("mensaje").addObserver(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -25,6 +28,8 @@ public class WaitingRoomChat extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         PanelMensajes = new javax.swing.JPanel();
         PanelSessions = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListSesiones = new javax.swing.JList<>();
         JLChat = new javax.swing.JLabel();
         JLJugadores = new javax.swing.JLabel();
         sendMensajePanel = new javax.swing.JPanel();
@@ -56,15 +61,32 @@ public class WaitingRoomChat extends javax.swing.JFrame {
 
         PanelSessions.setBackground(new java.awt.Color(204, 0, 204));
 
+        jListSesiones.setBackground(new java.awt.Color(204, 0, 204));
+        jListSesiones.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 18)); // NOI18N
+        jListSesiones.setForeground(new java.awt.Color(255, 255, 255));
+        jListSesiones.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "a" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jListSesiones.setAlignmentX(20.0F);
+        jScrollPane2.setViewportView(jListSesiones);
+
         javax.swing.GroupLayout PanelSessionsLayout = new javax.swing.GroupLayout(PanelSessions);
         PanelSessions.setLayout(PanelSessionsLayout);
         PanelSessionsLayout.setHorizontalGroup(
             PanelSessionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 161, Short.MAX_VALUE)
+            .addGroup(PanelSessionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                .addContainerGap())
         );
         PanelSessionsLayout.setVerticalGroup(
             PanelSessionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 390, Short.MAX_VALUE)
+            .addGroup(PanelSessionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         JLChat.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 18)); // NOI18N
@@ -288,9 +310,24 @@ public class WaitingRoomChat extends javax.swing.JFrame {
     private javax.swing.JTextField TFMensaje;
     private javax.swing.JButton enviarImagen;
     private javax.swing.JButton enviarMensaje;
+    private javax.swing.JList<String> jListSesiones;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JCheckBox jugadorListo;
     private javax.swing.JLabel mensajeError;
     private javax.swing.JPanel sendMensajePanel;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        jsonWRC = (JSONObject) evt.getNewValue();
+        
+        switch (jsonWRC.getString("type")) {
+            case "GetSesionesWR":
+                   System.out.println(jsonWRC);
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -35,6 +35,7 @@ public class SocketSession extends Thread {
     private PropertyChangeSupport observed;
 
     // private Frame frame;
+    private WaitingRoom waitingRoom;
 
     public SocketSession(Socket socketP, PropertyChangeSupport observed) {
         this.observed = observed;
@@ -68,7 +69,7 @@ public class SocketSession extends Thread {
                     onMensaje(line);
                 }
             } catch (Exception e) {
-                // e.printStackTrace();
+                //e.printStackTrace();
                 // System.out.println(e.getLocalizedMessage());
                 isRun = false;
                 onClose();
@@ -77,6 +78,10 @@ public class SocketSession extends Thread {
     }
 
     public void onClose() {
+        if(waitingRoom!=null){
+            waitingRoom.removeSesion(this);
+        }
+        ListaSesiones.getListasessiones().remove(this);
         System.out.println("Sesion Cerrada:: "+"Nombre Usuario: " + SesionName +" | IP CLIENT:" + socket.getInetAddress()+" | PORT CLIENT: " + socket.getPort());
     }
 
@@ -148,5 +153,9 @@ public class SocketSession extends Thread {
 
     public void setWRSocketSession(WaitingRoom wRSocketSession) {
         WRSocketSession = wRSocketSession;
+    }
+
+    public void setWaitingRoom(WaitingRoom waitingRoom) {
+        this.waitingRoom = waitingRoom;
     }
 }
