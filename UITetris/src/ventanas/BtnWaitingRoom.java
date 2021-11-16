@@ -2,6 +2,7 @@
 package ventanas;
 
 import java.util.UUID;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import org.json.JSONObject;
 import socketclient.SocketSession;
@@ -9,8 +10,9 @@ import socketclient.SocketSession;
 public class BtnWaitingRoom extends javax.swing.JPanel {
     
     private String id;
-    
-    public BtnWaitingRoom(String id) {
+    Lobby JFPadre;
+    public BtnWaitingRoom(String id, Lobby JFPadre) {
+        this.JFPadre =JFPadre;
         initComponents();
         this.id = id;
     }
@@ -76,6 +78,7 @@ public class BtnWaitingRoom extends javax.swing.JPanel {
         
         WaitingRoomChat WRC = new WaitingRoomChat();
         WRC.setVisible(true);
+        JFPadre.dispose();
     }//GEN-LAST:event_nombreSalaMouseClicked
 
 

@@ -12,9 +12,11 @@ import listas.ListaMensajes;
 import org.json.JSONObject;
 import socketclient.SocketSession;
 
-public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChangeListener{
+public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChangeListener {
+
     JSONObject jsonSendMensaje;
     JSONObject jsonWRC;
+
     public WaitingRoomChat() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -210,7 +212,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
 
     private void enviarMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarMensajeActionPerformed
         jsonSendMensaje = new JSONObject();
-        
+
         if (TFMensaje.getText().isEmpty()) {
             mensajeError.setText("El Mensaje no tiene ningun contenido, Por Favor Escriba Uno!!!");
         } else {
@@ -229,7 +231,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     private void TFMensajeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TFMensajeKeyPressed
 
         jsonSendMensaje = new JSONObject();
-        
+
         if (TFMensaje.getText().isEmpty()) {
             mensajeError.setText("El Mensaje no tiene ningun contenido, Por Favor Escriba Uno!!!");
 
@@ -321,10 +323,15 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         jsonWRC = (JSONObject) evt.getNewValue();
-        
+
         switch (jsonWRC.getString("type")) {
             case "GetSesionesWR":
-                   System.out.println(jsonWRC);
+                System.out.println(jsonWRC);
+                String[] modelo;
+//                for (int i = 0; i < jsonWRC.; i++) {
+//
+//                }
+//                jListSesiones.setModel(modelo);
                 break;
             default:
                 break;

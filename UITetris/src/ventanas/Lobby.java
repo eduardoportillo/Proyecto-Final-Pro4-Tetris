@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.JFrame;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import socketclient.Client;
@@ -113,7 +114,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
         jsonWR = (JSONObject) evt.getNewValue();
         switch (jsonWR.getString("type")) {
             case "CreateWaitingRoom":
-                    BtnWaitingRoom NWR = new BtnWaitingRoom(jsonWR.getJSONObject("newWaitingRoom").getString("WRId"));
+                    BtnWaitingRoom NWR = new BtnWaitingRoom(jsonWR.getJSONObject("newWaitingRoom").getString("WRId"), this);
                     LobbyPanel.add(NWR, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
                     HMbtnWaitingRoom.put(jsonWR.getJSONObject("newWaitingRoom").getString("WRId"), NWR);
                     NWR.getNombreSala().setText("Sala de: " + jsonWR.getJSONObject("newWaitingRoom").getString("ownerName"));
@@ -125,7 +126,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
                 for (int i = 0; i < jsonWR.getJSONArray("listaWR").length(); i++) {
                     LobbyPanel.removeAll();
                     JSONObject listaWR = jsonWR.getJSONArray("listaWR").getJSONObject(i);
-                    BtnWaitingRoom BWR = new BtnWaitingRoom(listaWR.getString("WRId"));
+                    BtnWaitingRoom BWR = new BtnWaitingRoom(listaWR.getString("WRId"), this);
                     HMbtnWaitingRoom.put(listaWR.getString("WRId"), BWR);
                     LobbyPanel.add(BWR, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
                     BWR.getNombreSala().setText("Sala de: " + listaWR.getString("ownerName"));
@@ -139,6 +140,8 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
                     BtnWaitingRoom objBtnWaitingRoom = HMbtnWaitingRoom.get(jsonWR.getString("WRId"));
                     LobbyPanel.remove(objBtnWaitingRoom);
                     HMbtnWaitingRoom.remove(jsonWR.getString("WRId"));
+                    posY-=60;
+                    this.repaint();
                     this.validate();
                     break;
             default:
