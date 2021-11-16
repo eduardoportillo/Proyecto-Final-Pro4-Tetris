@@ -10,6 +10,7 @@ public class FrameTetris extends Frame {
     private String idGame;
     public FrameTetris(String idGame) {
         this.idGame = idGame;
+        this.setTitle(idGame);
         setSize(400, 600);
         setResizable(true);
         // this.setDefaultCloseOperation(EXIT_ON_CLOSE);

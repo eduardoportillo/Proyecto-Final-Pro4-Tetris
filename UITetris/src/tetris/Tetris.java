@@ -175,11 +175,6 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
                     }
                 }
             }
-            JSONObject jsonSendLinea = new JSONObject();
-            jsonSendLinea.put("type", "completeLine");
-            jsonSendLinea.put("idGame", this.idGame);
-            SocketSession.getInstance("mensaje").sendString(jsonSendLinea.toString());
-
             lineasDespejadas++;
         }
     }
@@ -408,8 +403,7 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
             // caída firme
             case KeyEvent.VK_CONTROL:
                 tiempo = 1 << 30;
-                while (moverPieza(1, 0))
-                ;
+                while (moverPieza(1, 0));
                 break;
         }
         repaint();
@@ -486,9 +480,11 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         JSONObject jsonWR = (JSONObject) evt.getNewValue();
+
         switch (jsonWR.getString("type")) {
             case "completeLine":
-                if (!jsonWR.get(idGame).equals(this.idGame)) {
+
+                if (!jsonWR.getString("idGame").equals(this.idGame)) {
                     añadirPiso(1);
                 }
                 break;

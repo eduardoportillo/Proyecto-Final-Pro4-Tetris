@@ -50,9 +50,9 @@ public class Game {
         objSend.put("type", "lossGame");
         objSend.put("idGame", this.getId());
         objSend.put("idSession", sesion.getKey());
-        // jugadores.forEach((k, v) -> {
-        //     v.sendString(objSend.toString());
-        // });
+        jugadores.forEach((k, v) -> {
+            v.sendString(objSend.toString());
+        });
 
         if (this.looser.size() >= this.jugadores.size() - 1) {
             JSONObject objSend2 = new JSONObject();

@@ -137,7 +137,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
                       this.repaint();
                     this.validate();
                 }
-                break;
+                break;                 
                 
                 case "DeleteWaitingRoom":
                     BtnWaitingRoom objBtnWaitingRoom = HMbtnWaitingRoom.get(jsonWR.getString("WRId"));

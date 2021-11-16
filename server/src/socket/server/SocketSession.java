@@ -69,7 +69,7 @@ public class SocketSession extends Thread {
                     onMensaje(line);
                 }
             } catch (Exception e) {
-                // e.printStackTrace();
+                e.printStackTrace();
                 // System.out.println(e.getLocalizedMessage());
                 isRun = false;
                 onClose();

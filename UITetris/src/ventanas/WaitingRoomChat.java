@@ -18,8 +18,9 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     JSONObject jsonSendMensaje;
     JSONObject jsonWRC;
     String WRId;
+
     public WaitingRoomChat(String WRId) {
-        this.WRId =WRId;
+        this.WRId = WRId;
         initComponents();
         this.setLocationRelativeTo(null);
         SocketSession.getInstance("mensaje").addObserver(this);
@@ -294,6 +295,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         jsonStartGame.put("WRId", this.WRId);
         SocketSession.getInstance("mensaje").sendString(jsonStartGame.toString());
         this.dispose();
+
     }//GEN-LAST:event_startActionPerformed
 
     public static void main(String args[]) {
@@ -316,6 +318,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String WRId;
+
             public void run() {
                 new WaitingRoomChat(this.WRId).setVisible(true);
             }
@@ -349,7 +352,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                 DefaultListModel model = new DefaultListModel();
 
                 for (int i = 0; i < jsonWRC.getJSONArray("sessionesWR").length(); i++) {
-                    model.addElement( jsonWRC.getJSONArray("sessionesWR").getJSONObject(i).getString("SesionName"));
+                    model.addElement(jsonWRC.getJSONArray("sessionesWR").getJSONObject(i).getString("SesionName"));
 
                 }
                 jListSesiones.setModel(model);
