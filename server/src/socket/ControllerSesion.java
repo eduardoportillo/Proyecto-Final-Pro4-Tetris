@@ -9,17 +9,26 @@ import java.util.Base64;
 import org.json.JSONObject;
 
 import socket.chat.Mensaje;
-import socket.listas.ListaMensajes;
+import socket.listas.*;
 import socket.server.ListaSesiones;
+import socket.server.ServerS;
 import socket.server.SocketSession;
 
 public class ControllerSesion {
 
     public ControllerSesion(JSONObject json, SocketSession sesion, PropertyChangeSupport observed) {
-        switch (json.getString("Type")) {
+        switch (json.getString("type")) {
         case "RegistrarNombre":
             sesion.setSesionName(json.getString("NombreSesion"));
             sesion.onOpen();
+            break;
+
+        case "GetWaitingRooms":
+            ServerS.getInstanceServer().sendAll(Lobby.getInstance().toJson().toString());
+            break;
+
+        case "CreateWaitingRoom":
+            new WaitingRoom(sesion);
             break;
 
         default:

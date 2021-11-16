@@ -56,4 +56,10 @@ public class ServerS extends Thread {
     public void addObserver(PropertyChangeListener panel) {
         observed.addPropertyChangeListener(panel);
     }
+
+    public void sendAll(String mensaje){
+        for (int i = 0; i < ListaSesiones.getListasessiones().size(); i++) {
+            ListaSesiones.getListasessiones().get(i).sendString(mensaje);
+        }
+    }
 }

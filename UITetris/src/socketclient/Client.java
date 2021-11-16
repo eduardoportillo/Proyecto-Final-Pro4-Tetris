@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public class Client {
 
-    private String nameClienteSesion;
+    private static String nameClienteSesion;
     private String serverIp;
 
     public Client() {
@@ -18,16 +18,18 @@ public class Client {
     public void setNameClienteSesion(String nameClienteSesion) {
         this.nameClienteSesion = nameClienteSesion;
         JSONObject jsonSetNombre = new JSONObject();
-        jsonSetNombre.put("Type", "RegistrarNombre");
+        jsonSetNombre.put("type", "RegistrarNombre");
         jsonSetNombre.put("NombreSesion", nameClienteSesion);
-        SocketSession.getInstance(serverIp).sendString(jsonSetNombre.toString());
+        SocketSession.getInstance("mensaje").sendString(jsonSetNombre.toString());
+    }
+    
+    public static String getNameClienteSesion() {
+        return nameClienteSesion;
     }
 
     public String getServerIp() {
         return serverIp;
     }
 
-    public String getNameClienteSesion() {
-        return nameClienteSesion;
-    }
+    
 }

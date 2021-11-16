@@ -196,7 +196,7 @@ public class WaitingRoomChat extends javax.swing.JFrame {
             String mensaje = TFMensaje.getText();
             Mensaje msn = new Mensaje(mensaje);
             ListaMensajes.setMensaje(msn);
-            SocketSession.getInstance("mesaje").sendObject(msn);
+            SocketSession.getInstance("mensaje").sendObject(msn);
             TFMensaje.setText("");
             TFMensaje.requestFocus();
             mensajeError.setText("");
@@ -217,7 +217,7 @@ public class WaitingRoomChat extends javax.swing.JFrame {
                 String mensaje = TFMensaje.getText();
                 Mensaje msn = new Mensaje(mensaje);
                 ListaMensajes.setMensaje(msn);
-                SocketSession.getInstance("mesaje").sendObject(msn);
+                SocketSession.getInstance("mensaje").sendObject(msn);
                 TFMensaje.setText("");
                 TFMensaje.requestFocus();
                 mensajeError.setText("");
@@ -240,7 +240,7 @@ public class WaitingRoomChat extends javax.swing.JFrame {
             String b64 = Base64.getEncoder().encodeToString(filecont);
             Mensaje msn = new Mensaje("@", b64);
             ListaMensajes.setMensaje(msn);
-            SocketSession.getInstance("mesaje").sendObject(msn);
+            SocketSession.getInstance("mensaje").sendObject(msn);
         } catch (Exception Exception) {
             System.out.println(Exception);
         }

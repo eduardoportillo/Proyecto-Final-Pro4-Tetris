@@ -1,11 +1,24 @@
 package ventanas;
 
-public class Lobby extends javax.swing.JFrame {
-    
-    
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import socketclient.Client;
+import socketclient.SocketSession;
+
+public class Lobby extends javax.swing.JFrame implements PropertyChangeListener {
+
+    public ArrayList<BtnWaitingRoom> btnWRList = new ArrayList();
+    JSONObject jsonWR;
+    int posY = 30;
+
     public Lobby() {
         initComponents();
         this.setLocationRelativeTo(null);
+        SocketSession.getInstance("mensaje").addObserver(this);
+        getWR();
     }
 
     @SuppressWarnings("unchecked")
@@ -14,8 +27,7 @@ public class Lobby extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        LobbyPanle = new javax.swing.JPanel();
-        btnWaitingRoom1 = new ventanas.BtnWaitingRoom();
+        LobbyPanel = new javax.swing.JPanel();
         createWR = new javax.swing.JButton();
         fondoLobby = new javax.swing.JLabel();
 
@@ -26,10 +38,8 @@ public class Lobby extends javax.swing.JFrame {
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        LobbyPanle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        LobbyPanle.add(btnWaitingRoom1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
-
-        jScrollPane1.setViewportView(LobbyPanle);
+        LobbyPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jScrollPane1.setViewportView(LobbyPanel);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 450, 400));
 
@@ -51,9 +61,10 @@ public class Lobby extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createWRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createWRActionPerformed
-        
+        JSONObject jsonSendWR = new JSONObject();
+        jsonSendWR.put("type", "CreateWaitingRoom");
+        SocketSession.getInstance("mensaje").sendString(jsonSendWR.toString());
     }//GEN-LAST:event_createWRActionPerformed
-    
 
     public static void main(String args[]) {
 
@@ -81,12 +92,46 @@ public class Lobby extends javax.swing.JFrame {
         });
     }
 
+    public void getWR() {
+        JSONObject jsonGetWR = new JSONObject();
+        jsonGetWR.put("type", "GetWaitingRooms");
+        SocketSession.getInstance("mensaje").sendString(jsonGetWR.toString());
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel LobbyPanle;
-    private ventanas.BtnWaitingRoom btnWaitingRoom1;
+    private javax.swing.JPanel LobbyPanel;
     private javax.swing.JButton createWR;
     private javax.swing.JLabel fondoLobby;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        jsonWR = (JSONObject) evt.getNewValue();
+        switch (jsonWR.getString("type")) {
+            case "CreateWaitingRoom":
+                    BtnWaitingRoom NWR = new BtnWaitingRoom();
+                    LobbyPanel.add(NWR, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
+                    NWR.getNombreSala().setText("Sala de: " + jsonWR.getJSONObject("newWaitingRoom").getString("ownerName"));
+                    posY += 60;
+                    this.validate();
+                break;
+
+            case "GetWaitingRooms":
+                for (int i = 0; i < jsonWR.getJSONArray("listaWR").length(); i++) {
+                    JSONObject listaWR = jsonWR.getJSONArray("listaWR").getJSONObject(i);
+                    BtnWaitingRoom BWR = new BtnWaitingRoom();
+                    LobbyPanel.add(BWR, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
+                    BWR.getNombreSala().setText("Sala de: " + listaWR.getString("ownerName"));
+//                      BWR.getNombreSala().setText("Jugadores Online: "+listaWR.getString(""));
+                    posY += 60;
+                    this.validate();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 }

@@ -12,10 +12,17 @@ import org.json.JSONObject;
 public class ControllerSession {
 
     public ControllerSession(JSONObject json, SocketSession sesion, PropertyChangeSupport observed) {
-        switch (json.getString("Type")) {
+        switch (json.getString("type")) {
+            case "CreateWaitingRoom":
+                observed.firePropertyChange("lobby", "", json);
+                break;
+
+            case "GetWaitingRooms":
+                observed.firePropertyChange("lobby", "", json);
+                break;
 
             case "Chat":
-        try {
+                try {
                 byte[] data = Base64.getDecoder().decode(json.getString("Mensaje"));
                 ObjectInputStream ois;
                 ois = new ObjectInputStream(new ByteArrayInputStream(data));

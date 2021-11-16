@@ -22,7 +22,7 @@ public class SocketSession extends Thread {
     private static SocketSession INSTANCE;
 
     public static SocketSession getInstance(String ip) {
-        if (ip.equals("mesaje")) {
+        if (ip.equals("mensaje")) {
             return INSTANCE;
         } else {
             INSTANCE = new SocketSession(ip, 5000);

@@ -15,6 +15,7 @@ import java.util.Base64;
 import org.json.JSONObject;
 
 import socket.ControllerSesion;
+import socket.listas.WaitingRoom;
 import socket.server.ListaSesiones;
 
 // import view.Frame;
@@ -26,6 +27,7 @@ public class SocketSession extends Thread {
     private String key;
     private BufferedReader request;
     private ObjectInputStream requestObject;
+    private WaitingRoom WRSocketSession; 
 
     private String SesionName;
 
@@ -74,8 +76,6 @@ public class SocketSession extends Thread {
         }
     }
 
-    
-
     public void onClose() {
         System.out.println("Sesion Cerrada:: "+"Nombre Usuario: " + SesionName +" | IP CLIENT:" + socket.getInetAddress()+" | PORT CLIENT: " + socket.getPort());
     }
@@ -115,6 +115,13 @@ public class SocketSession extends Thread {
         }
     }
 
+    public JSONObject toJson(){
+        JSONObject jsonSS = new JSONObject();
+        jsonSS.put("SocketId", instance.getKey());
+        jsonSS.put("SesionName", this.getSesionName());
+        return jsonSS;
+    }
+
     public Socket getSocket() {
         return socket;
     }
@@ -133,5 +140,13 @@ public class SocketSession extends Thread {
 
     public void setSesionName(String sesionName) {
         SesionName = sesionName;
+    }
+
+    public WaitingRoom getWRSocketSession() {
+        return WRSocketSession;
+    }
+
+    public void setWRSocketSession(WaitingRoom wRSocketSession) {
+        WRSocketSession = wRSocketSession;
     }
 }
