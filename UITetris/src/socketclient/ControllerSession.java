@@ -13,7 +13,7 @@ import ventanas.WaitingRoomChat;
 
 public class ControllerSession {
 
-    public ControllerSession(JSONObject json, SocketSession sesion, PropertyChangeSupport observed) {
+    public ControllerSession(JSONObject json, SocketSession sesionServer, PropertyChangeSupport observed) {
         switch (json.getString("type")) {
             case "CreateWaitingRoom":
                 observed.firePropertyChange("lobby", "", json);
@@ -33,7 +33,7 @@ public class ControllerSession {
 
             case "StartGame":
                 observed.firePropertyChange("lobby", "", json);
-                FrameTetris tetris = new FrameTetris(json.getString("idGame"));
+                FrameTetris tetris = new FrameTetris(json.getString("idGame"),SocketSession.getInstance("mensaje").getKey());
                 break;
 
             case "completeLine":

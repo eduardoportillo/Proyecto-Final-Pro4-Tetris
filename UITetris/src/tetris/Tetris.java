@@ -15,6 +15,7 @@ import ventanas.BtnWaitingRoom;
 public class Tetris extends Panel implements KeyListener, PropertyChangeListener {
 
     public String idGame;
+    public String idJugador;
     JSONObject jsonFinDelJuego;
     // Dimensiones del tablero
     private int heightTablero = 22;
@@ -60,9 +61,10 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
 
     private boolean juegoFinalizado = false;
 
-    public Tetris(String idGame) {
+    public Tetris(String idGame, String idJugador) {
         this.jsonFinDelJuego = new JSONObject();
         this.idGame = idGame;
+        this.idJugador = idJugador;
 
         addKeyListener(this);
 
@@ -277,11 +279,9 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
     // pinta la interfaz gráfica
     private void mostrarUI() { // [ ] posteriormente cambiar la interfaz para que no sea igual
         graficos.setColor(UIColor);
-        // graficos.drawString("LINEAS DESPEJADAS: " + lineasDespejadas, 10, 20);
-        // graficos.drawString("NIVEL ACTUAL: " + nivel, 10, 40);
-        // if (estaPausado) { // [ ] definir que hacer con la pausa
-        // graficos.drawString("PAUSADO", 10, 30);
-        // }
+         graficos.drawString("LINEAS DESPEJADAS: " + lineasDespejadas, 10, 20);
+         graficos.drawString("NIVEL ACTUAL: " + nivel, 10, 40);
+
         if (juegoFinalizado) {
             jsonFinDelJuego.put("type", "loseGame");
             jsonFinDelJuego.put("idGame", this.idGame);
@@ -483,8 +483,11 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
 
         switch (jsonWR.getString("type")) {
             case "completeLine":
-
-                if (!jsonWR.getString("idGame").equals(this.idGame)) {
+                System.out.println("Jugador Cliente: " + this.idJugador);
+                System.out.println("Jugador Server: " + jsonWR.getString("idJugador"));
+                System.out.println("Jugadores son iguales: " + jsonWR.getString("idJugador").equals(this.idJugador));
+                
+                if (!jsonWR.getString("idJugador").equals(this.idJugador)) {
                     añadirPiso(1);
                 }
                 break;

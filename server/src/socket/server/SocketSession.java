@@ -42,8 +42,7 @@ public class SocketSession extends Thread {
         this.instance = this;
         this.socket = socketP;
         ListaSesiones.getListasessiones().add(this);
-        String adr = socketP.getRemoteSocketAddress().toString();
-        key = adr;
+        key = socketP.getRemoteSocketAddress().toString();
         this.start();
     }
 
@@ -69,7 +68,7 @@ public class SocketSession extends Thread {
                     onMensaje(line);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
                 // System.out.println(e.getLocalizedMessage());
                 isRun = false;
                 onClose();

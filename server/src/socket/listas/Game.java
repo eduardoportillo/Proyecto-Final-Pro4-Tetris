@@ -38,6 +38,7 @@ public class Game {
         JSONObject objSend = new JSONObject();
         objSend.put("type", "completeLine");
         objSend.put("idGame", this.getId());
+        objSend.put("idJugador", jugadores.get(sesion.getKey()).getKey());
         jugadores.forEach((k, v) -> {
             v.sendString(objSend.toString());
         });

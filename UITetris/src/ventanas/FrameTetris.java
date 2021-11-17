@@ -7,17 +7,15 @@ import tetris.Tetris;
 public class FrameTetris extends Frame {
 
     private Tetris tetris;
-    private String idGame;
-    public FrameTetris(String idGame) {
-        this.idGame = idGame;
-        this.setTitle(idGame);
+    
+    public FrameTetris(String idGame, String idJugador) {
+        
+        this.setTitle("Sesion del Jugador: "+idJugador);
         setSize(400, 600);
         setResizable(true);
-        // this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        // setUndecorated(true);
         setLocationRelativeTo(null);
 
-        tetris = new Tetris(idGame);
+        tetris = new Tetris(idGame, idJugador);
         add(tetris);
 
         setVisible(true);

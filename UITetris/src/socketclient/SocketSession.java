@@ -83,7 +83,8 @@ public class SocketSession extends Thread {
     private boolean isRun;
     private BufferedReader request;
     private PrintWriter response;
-
+    private String key;
+    
     private PropertyChangeSupport observed;
 
     Socket socket;
@@ -93,6 +94,7 @@ public class SocketSession extends Thread {
         try {
             socket = new Socket();
             socket.connect(new InetSocketAddress(ip, puerto), 100);
+            key = (socket.getInetAddress()+ ":" + socket.getLocalPort());
             isRun = true;
             this.start();
         } catch (Exception e) {
@@ -174,6 +176,10 @@ public class SocketSession extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getKey() {
+        return key;
     }
 
 }
