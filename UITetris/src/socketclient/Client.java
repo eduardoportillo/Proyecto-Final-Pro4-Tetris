@@ -1,6 +1,8 @@
 package socketclient;
 
+import javax.swing.JProgressBar;
 import org.json.JSONObject;
+import ventanas.IndexFrame;
 
 public class Client {
 

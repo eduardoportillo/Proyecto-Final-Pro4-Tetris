@@ -18,8 +18,6 @@ public class Lobby {
         return instance;
     }
 
-    // public ArrayList<WaitingRoom> WaitingRoomList;
-
     public HashMap<String,WaitingRoom> HMWaitingRoom;
 
     public Lobby(){
@@ -39,8 +37,6 @@ public class Lobby {
     }
 
     public void addWR(String id, WaitingRoom watingRoom){
-        // this.WaitingRoomList.add(watingRoom);
-
         this.HMWaitingRoom.put(id, watingRoom);
 
         JSONObject newWR = new JSONObject();

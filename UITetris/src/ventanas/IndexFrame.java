@@ -4,19 +4,33 @@
  */
 package ventanas;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import socketclient.Client;
+import socketclient.SocketSession;
 import tetris.Tetris;
 
 public class IndexFrame extends javax.swing.JFrame {
 
+    private IndexFrame instance;
+    public static int load;
+
     public IndexFrame() {
         initComponents();
+        instance = this;
         this.setLocationRelativeTo(null);
+        loadPanel.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        loadPanel = new javax.swing.JPanel();
+        loadLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         multiPlayer = new javax.swing.JLabel();
         singelPlayer = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
@@ -24,6 +38,17 @@ public class IndexFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        loadPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        loadLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/loadCool.gif"))); // NOI18N
+        loadPanel.add(loadLabel);
+
+        jLabel1.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 18)); // NOI18N
+        jLabel1.setText("Buscando Servidor...");
+        loadPanel.add(jLabel1);
+
+        getContentPane().add(loadPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 350, 200, 150));
 
         multiPlayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Multiplayer.png"))); // NOI18N
         multiPlayer.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -53,16 +78,26 @@ public class IndexFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void singelPlayerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_singelPlayerMouseClicked
-        FrameTetris tetris = new FrameTetris("","");
+        FrameTetris tetris = new FrameTetris("", "");
         tetris.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_singelPlayerMouseClicked
 
     private void multiPlayerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_multiPlayerMouseClicked
-        Login login = new Login();
-        login.setVisible(true);
-        Tetris.multiplayer = true;
-        this.dispose();
+
+        loadPanel.setVisible(true); // BUG no lo vuelve true hasta que pilla el servidor
+
+        Client client = new Client();
+
+        if (SocketSession.encotroServer) {
+            Login login = new Login(client);
+            login.setVisible(true);
+            Tetris.multiplayer = true;
+            this.dispose();
+        } else {
+            loadPanel.setVisible(false);
+        }
+
     }//GEN-LAST:event_multiPlayerMouseClicked
 
     public static void main(String args[]) {
@@ -92,6 +127,9 @@ public class IndexFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel fondo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel loadLabel;
+    private javax.swing.JPanel loadPanel;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel multiPlayer;
     private javax.swing.JLabel singelPlayer;

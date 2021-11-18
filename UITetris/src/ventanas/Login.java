@@ -6,13 +6,19 @@ public class Login extends javax.swing.JFrame {
 
     Client client = null;
 
-    public Login() {
+//    public Login() {
+//        initComponents();
+//        this.setSize(360, 490);
+//        this.setLocationRelativeTo(null);
+//        intLabelIpServer(client.getServerIp());
+//    }
+    
+    public Login(Client client) {
+        this.client = client;
         initComponents();
         this.setSize(360, 490);
         this.setLocationRelativeTo(null);
-        client = new Client();
         intLabelIpServer(client.getServerIp());
-
     }
 
     @SuppressWarnings("unchecked")
@@ -31,7 +37,7 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
         setBackground(new java.awt.Color(0, 51, 102));
-        setCursor(new java.awt.Cursor(java.awt.Cursor.SE_RESIZE_CURSOR));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(300, 400));
         setName("LoginFrame"); // NOI18N
         setPreferredSize(new java.awt.Dimension(340, 450));
@@ -46,9 +52,9 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(login, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 120, 70));
 
         nombreTF.setName("nombreTF"); // NOI18N
-        nombreTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nombreTFActionPerformed(evt);
+        nombreTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nombreTFKeyPressed(evt);
             }
         });
         getContentPane().add(nombreTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 160, 30));
@@ -65,12 +71,13 @@ public class Login extends javax.swing.JFrame {
         });
         getContentPane().add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 100, 40));
 
-        labelIpServer.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 14)); // NOI18N
+        labelIpServer.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 15)); // NOI18N
         labelIpServer.setForeground(new java.awt.Color(255, 255, 255));
         labelIpServer.setToolTipText("");
         getContentPane().add(labelIpServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 340, -1));
 
         nameError.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
+        nameError.setForeground(new java.awt.Color(255, 255, 0));
         getContentPane().add(nameError, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 320, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -79,10 +86,6 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void nombreTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreTFActionPerformed
-
-    }//GEN-LAST:event_nombreTFActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
@@ -97,19 +100,25 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    private void nombreTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombreTFKeyPressed
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            if (nombreTF.getText().isEmpty()) {
+                nameError.setText("El nombre Esta Vacio, Por Favor Escriba uno!!!");
+            } else {
+                client.setNameClienteSesion(nombreTF.getText());
+                Lobby lobby = new Lobby();
+                lobby.setVisible(true);
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_nombreTFKeyPressed
+
     public void intLabelIpServer(String ipServer) {
         labelIpServer.setText("El servidor se encuentra en el Host: " + ipServer);
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -126,12 +135,10 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new Login(null).setVisible(true);
             }
         });
     }

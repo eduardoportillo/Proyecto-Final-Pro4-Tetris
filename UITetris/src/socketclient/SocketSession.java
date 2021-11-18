@@ -14,13 +14,18 @@ import java.net.NetworkInterface;
 import java.net.Socket;
 import java.util.Base64;
 import java.util.Enumeration;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 import org.json.JSONObject;
+import ventanas.IndexFrame;
+import ventanas.Login;
 
 public class SocketSession extends Thread {
 
     private static SocketSession INSTANCE;
-
+    public static boolean encotroServer;
+    
     public static SocketSession getInstance(String ip) {
         if (ip.equals("mensaje")) {
             return INSTANCE;
@@ -31,6 +36,7 @@ public class SocketSession extends Thread {
     }
 
     public static String buscarServer() {
+        
         String ip = getLocalHostLANAddress().getHostAddress();
         String ips[] = ip.split("\\.");
         ip = "";
@@ -38,16 +44,22 @@ public class SocketSession extends Thread {
             ip += ips[i] + ".";
         }
         String aux = "";
-        for (int i = 2; i < 255; i++) {
+        for (int i = 2; i < 256; i++) {
             if (INSTANCE == null || !INSTANCE.isRun) {
                 aux = ip + i;
-                System.out.print(".");
+                System.out.print("#");
                 getInstance(aux);
             } else {
                 break;
             }
         }
-        System.out.println("El servidor se encuentra en el Host:: " + aux);
+        if(aux.equals(ip+"255")){
+            JOptionPane.showMessageDialog(null, "No se Pillo Server");
+            SocketSession.encotroServer=false;
+        }else{
+            SocketSession.encotroServer=true;
+            System.out.println("El servidor se encuentra en el Host:: " + aux);
+        }
         return aux;
     }
 
@@ -80,6 +92,7 @@ public class SocketSession extends Thread {
     }
 
 //////// Fin de Atributo y Metodos Staticos
+    
     private boolean isRun;
     private BufferedReader request;
     private PrintWriter response;
@@ -93,7 +106,7 @@ public class SocketSession extends Thread {
         observed = new PropertyChangeSupport(this);
         try {
             socket = new Socket();
-            socket.connect(new InetSocketAddress(ip, puerto), 100);
+            socket.connect(new InetSocketAddress(ip, puerto), 20);
             key = (socket.getInetAddress()+ ":" + socket.getLocalPort());
             isRun = true;
             this.start();
