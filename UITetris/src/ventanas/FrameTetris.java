@@ -11,6 +11,7 @@ public class FrameTetris extends Frame {
     public FrameTetris(String idGame, String idJugador) {
         
         this.setTitle("Sesion del Jugador: "+idJugador);
+        this.setResizable(false);
         setSize(400, 600);
         setResizable(true);
         setLocationRelativeTo(null);

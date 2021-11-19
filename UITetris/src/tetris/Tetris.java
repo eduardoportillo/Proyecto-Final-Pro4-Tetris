@@ -114,7 +114,7 @@ public class Tetris extends Panel implements KeyListener, PropertyChangeListener
                         jsonFinDelJuego.put("type", "loseGame");
                         jsonFinDelJuego.put("idGame", id_game);
                         SocketSession.getInstance("mensaje").sendString(jsonFinDelJuego.toString());
-                        JOptionPane.showMessageDialog(null, "JUEGO FINALIZADO -- Q PARA SALIR; R PARA REINICIAR");
+                        JOptionPane.showMessageDialog(null, "JUEGO FINALIZADO -- Q PARA SALIR");
                     }
 
                     // coloque la pieza y permita que el usuario sostenga una pieza. El tiempo de

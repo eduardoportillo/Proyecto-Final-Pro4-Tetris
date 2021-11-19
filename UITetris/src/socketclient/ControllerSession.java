@@ -36,6 +36,10 @@ public class ControllerSession {
                 FrameTetris tetris = new FrameTetris(json.getString("idGame"), SocketSession.getInstance("mensaje").getKey());
                 break;
 
+            case "StartGameclock":
+                observed.firePropertyChange("StartGameclock", "", json);
+                break;
+
             case "completeLine":
                 observed.firePropertyChange("lobby", "", json);
                 break;

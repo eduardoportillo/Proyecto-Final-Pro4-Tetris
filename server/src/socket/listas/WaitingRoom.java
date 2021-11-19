@@ -65,11 +65,17 @@ public class WaitingRoom {
     }
 
     public void startGame() {
+
+        JSONObject StartGameclock = new JSONObject();
+        StartGameclock.put("type", "StartGameclock");
+        ServerS.getInstanceServer().sendAll(StartGameclock.toString());
+
         Lobby.getInstance().HMWaitingRoom.remove(this.getId());
         JSONObject deleteWaitingRoom = new JSONObject();
         deleteWaitingRoom.put("type", "DeleteWaitingRoom");
         deleteWaitingRoom.put("WRId", this.getId());
         ServerS.getInstanceServer().sendAll(deleteWaitingRoom.toString());
+
         new Game(HMSessions);
 
     }

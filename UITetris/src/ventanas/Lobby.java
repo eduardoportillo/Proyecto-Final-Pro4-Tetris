@@ -20,6 +20,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
         initComponents();
         this.setLocationRelativeTo(null);
         SocketSession.getInstance("mensaje").addObserver(this);
+        this.setResizable(false);
         getWR();
     }
 

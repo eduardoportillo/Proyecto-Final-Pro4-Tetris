@@ -76,7 +76,7 @@ public class BtnWaitingRoom extends javax.swing.JPanel {
         sendSessinoWR.put("type", "SendSessionWR");
         sendSessinoWR.put("WRId", this.id);
         SocketSession.getInstance("mensaje").sendString(sendSessinoWR.toString());
-
+        
         WRC.setVisible(true);
         JFPadre.dispose();
     }//GEN-LAST:event_nombreSalaMouseClicked

@@ -18,6 +18,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         this.setSize(360, 490);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         intLabelIpServer(client.getServerIp());
     }
 

@@ -21,6 +21,7 @@ public class IndexFrame extends javax.swing.JFrame {
         initComponents();
         instance = this;
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         loadPanel.setVisible(false);
     }
 

@@ -1,15 +1,20 @@
-package ventanas;
+    package ventanas;
 
 import chat.Mensaje;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import static java.lang.Thread.sleep;
 import java.nio.file.Files;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -31,6 +36,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         initComponents();
         this.WRId = WRId;
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
 
         jScrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
             public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -60,7 +66,6 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         TFMensaje = new javax.swing.JTextField();
         enviarMensaje = new javax.swing.JButton();
         enviarImagen = new javax.swing.JButton();
-        jugadorListo = new javax.swing.JCheckBox();
         mensajeError = new javax.swing.JLabel();
         start = new javax.swing.JButton();
 
@@ -106,11 +111,6 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
 
         sendMensajePanel.setBackground(new java.awt.Color(255, 255, 0));
 
-        TFMensaje.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TFMensajeActionPerformed(evt);
-            }
-        });
         TFMensaje.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 TFMensajeKeyPressed(evt);
@@ -131,18 +131,10 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
             }
         });
 
-        jugadorListo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jugadorListo.setText("Listo Para Comenzar Partida.");
-        jugadorListo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jugadorListoActionPerformed(evt);
-            }
-        });
-
-        mensajeError.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        mensajeError.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         mensajeError.setForeground(new java.awt.Color(255, 0, 0));
 
-        start.setText("start");
+        start.setText("Comenzar Juego");
         start.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startActionPerformed(evt);
@@ -157,17 +149,17 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                 .addContainerGap()
                 .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(sendMensajePanelLayout.createSequentialGroup()
-                        .addComponent(mensajeError, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(start, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(TFMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(mensajeError, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(sendMensajePanelLayout.createSequentialGroup()
+                        .addComponent(TFMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)))
                 .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(sendMensajePanelLayout.createSequentialGroup()
                         .addComponent(enviarMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(enviarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jugadorListo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(start, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(26, 26, 26))
         );
         sendMensajePanelLayout.setVerticalGroup(
@@ -180,7 +172,6 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                     .addComponent(enviarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jugadorListo)
                     .addComponent(mensajeError, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(start))
                 .addContainerGap(13, Short.MAX_VALUE))
@@ -224,11 +215,24 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TFMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFMensajeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TFMensajeActionPerformed
-
     private void enviarMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarMensajeActionPerformed
+        jsonSendMensajeText = new JSONObject();
+
+        if (TFMensaje.getText().isEmpty()) {
+            mensajeError.setText("El Mensaje no tiene ningun contenido, Por Favor Escriba Uno!!!");
+        } else {
+
+            String mensaje = TFMensaje.getText();
+            jsonSendMensajeText.put("WRid", this.WRId);
+            jsonSendMensajeText.put("type", "Chat");
+            jsonSendMensajeText.put("mensajeType", "text");
+            jsonSendMensajeText.put("mensajeChat", mensaje);
+            SocketSession.getInstance("mensaje").sendString(jsonSendMensajeText.toString());
+
+            TFMensaje.setText("");
+            TFMensaje.requestFocus();
+            mensajeError.setText("");
+        }
 
 
     }//GEN-LAST:event_enviarMensajeActionPerformed
@@ -236,7 +240,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     private void TFMensajeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TFMensajeKeyPressed
 
         jsonSendMensajeText = new JSONObject();
-        
+
         if (evt.getKeyCode() == evt.VK_ENTER) {
             if (TFMensaje.getText().isEmpty()) {
                 mensajeError.setText("El Mensaje no tiene ningun contenido, Por Favor Escriba Uno!!!");
@@ -259,40 +263,29 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     }//GEN-LAST:event_TFMensajeKeyPressed
 
     private void enviarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarImagenActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "jpeg", "png");
-        fileChooser.addChoosableFileFilter(filter);
-        fileChooser.setFileFilter(filter);
-        int seleccion = fileChooser.showOpenDialog(sendMensajePanel);
-
-        File abreimg = fileChooser.getSelectedFile();
-        try {
-            byte[] filecont = Files.readAllBytes(abreimg.toPath());
-            String b64 = Base64.getEncoder().encodeToString(filecont);
-            Mensaje msn = new Mensaje("@", b64);
-            ListaMensajes.setMensaje(msn);
-            SocketSession.getInstance("mensaje").sendObject(msn);
-        } catch (Exception Exception) {
-            System.out.println(Exception);
-        }
+//        JFileChooser fileChooser = new JFileChooser();
+//        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "jpeg", "png");
+//        fileChooser.addChoosableFileFilter(filter);
+//        fileChooser.setFileFilter(filter);
+//        int seleccion = fileChooser.showOpenDialog(sendMensajePanel);
+//
+//        File abreimg = fileChooser.getSelectedFile();
+//        try {
+//            byte[] filecont = Files.readAllBytes(abreimg.toPath());
+//            String b64 = Base64.getEncoder().encodeToString(filecont);
+//            Mensaje msn = new Mensaje("@", b64);
+//            ListaMensajes.setMensaje(msn);
+//            SocketSession.getInstance("mensaje").sendObject(msn);
+//        } catch (Exception Exception) {
+//            System.out.println(Exception);
+//        }
     }//GEN-LAST:event_enviarImagenActionPerformed
-
-    private void jugadorListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jugadorListoActionPerformed
-
-        if (jugadorListo.isSelected() == true) {
-            System.out.println("Este Jugador esta listo");
-        } else {
-            System.out.println("Este Jugador NO esta listo");
-        }
-    }//GEN-LAST:event_jugadorListoActionPerformed
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
         JSONObject jsonStartGame = new JSONObject();
         jsonStartGame.put("type", "StartGame");
         jsonStartGame.put("WRId", this.WRId);
         SocketSession.getInstance("mensaje").sendString(jsonStartGame.toString());
-        this.dispose();
-
     }//GEN-LAST:event_startActionPerformed
 
     public static void main(String args[]) {
@@ -333,7 +326,6 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     private javax.swing.JList<String> jListSesiones;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JCheckBox jugadorListo;
     private javax.swing.JLabel mensajeError;
     private javax.swing.JPanel sendMensajePanel;
     private javax.swing.JButton start;
@@ -356,9 +348,38 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                 this.repaint();
                 this.validate();
                 break;
+
+            case "DeleteWaitingRoom":
+                this.dispose();
+                break;
+
+            case "StartGameclock":
+                for (int i = 5; i >= 0; i--) {
+                    MensajePanel mps = new MensajePanel();
+                    PanelMensajes.add(mps, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, posY, -1, -1));
+                    mps.getMensajeMP().setFont(new Font("Serif", Font.BOLD, 20));
+                    mps.getMensajeMP().setForeground(Color.red);
+                    
+                    try {
+                        if (i == 0) {
+                            mps.getMensajeMP().setText("El Juego esta por iniciar...");
+                            System.out.println("El Juego esta por iniciar...");
+                            break;
+                        } else {
+                            mps.getMensajeMP().setText("El jugo comienza en : " + i);
+                            posY += 100;
+                            System.out.println("El jugo comienza en : " + i);
+                        }
+                        sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(WaitingRoomChat.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
             case "Chat":
                 switch (jsonWRC.getString("mensajeType")) {
                     case "text":
+
                         MensajePanel mp = new MensajePanel();
 
                         if (jsonWRC.get("nameJugador").toString().equals(Client.getNameClienteSesion())) {
@@ -366,14 +387,15 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                         } else {
                             PanelMensajes.add(mp, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
                         }
-
                         mp.getNameUserMP().setText(jsonWRC.get("nameJugador").toString());
                         mp.getMensajeMP().setText(jsonWRC.get("mensajeChat").toString());
                         mp.getDateMP().setText(jsonWRC.get("horaEnvio").toString());
-                        posY += 100;
+                        posY += 120;
+
                         break;
                 }
                 break;
+
             default:
                 break;
         }
