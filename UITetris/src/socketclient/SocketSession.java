@@ -15,11 +15,8 @@ import java.net.Socket;
 import java.util.Base64;
 import java.util.Enumeration;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 
 import org.json.JSONObject;
-import ventanas.IndexFrame;
-import ventanas.Login;
 
 public class SocketSession extends Thread {
 
@@ -107,7 +104,7 @@ public class SocketSession extends Thread {
         try {
             socket = new Socket();
             socket.connect(new InetSocketAddress(ip, puerto), 20);
-            key = (socket.getInetAddress()+ ":" + socket.getLocalPort());
+            key = (getLocalHostLANAddress()+ ":" + socket.getLocalPort());
             isRun = true;
             this.start();
         } catch (Exception e) {
@@ -143,7 +140,7 @@ public class SocketSession extends Thread {
                     onMensaje(line);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
                 System.out.println("error en hilo socket-session");
                 isRun = false;
                 System.exit(0);

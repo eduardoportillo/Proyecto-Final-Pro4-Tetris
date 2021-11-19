@@ -1,4 +1,4 @@
-import socket.server.ServerS;
+import serversocket.server.ServerS;
 
 public class Main {
     public static void main(String[] args) throws Exception {

@@ -1,6 +1,5 @@
 package ventanas;
 
-import chat.Mensaje;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -21,7 +20,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import listas.ListaMensajes;
 import org.json.JSONObject;
 import socketclient.Client;
 import static socketclient.Client.getNameClienteSesion;
@@ -176,9 +174,10 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                     .addComponent(enviarMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(enviarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mensajeError, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(start))
+                .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(start)
+                    .addGroup(sendMensajePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(mensajeError, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -376,7 +375,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                             break;
                         } else {
                             mps.getMensajeMP().setText("El jugo comienza en : " + i);
-                            posY += 100;
+                            posY += 125;
                             System.out.println("El jugo comienza en : " + i);
                         }
                         sleep(1000);

@@ -99,7 +99,7 @@ public class IndexFrame extends javax.swing.JFrame {
             loadPanel.setVisible(false);
         }
 
-    }//GEN-LAST:event_multiPlayerMouseClicked
+    }//GEN-LAST:event_multiPlayerMouseClicked   
 
     public static void main(String args[]) {
         try {
