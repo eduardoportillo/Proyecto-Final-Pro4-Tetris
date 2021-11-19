@@ -18,8 +18,6 @@ public class MensajePanel extends javax.swing.JPanel {
 
         nameUserMP.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 14)); // NOI18N
 
-        mensajeMP.setText("Mensaje");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -42,7 +40,7 @@ public class MensajePanel extends javax.swing.JPanel {
                 .addComponent(nameUserMP)
                 .addGap(18, 18, 18)
                 .addComponent(mensajeMP)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addComponent(dateMP))
         );
     }// </editor-fold>//GEN-END:initComponents

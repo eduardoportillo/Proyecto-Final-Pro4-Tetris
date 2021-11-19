@@ -1,11 +1,15 @@
 package socketclient;
 
 import chat.Mensaje;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.io.ObjectInputStream;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import listas.ListaMensajes;
 import org.json.JSONObject;
 import ventanas.FrameTetris;
@@ -50,12 +54,21 @@ public class ControllerSession {
             case "Chat":
                 switch (json.getString("mensajeType")) {
                     case "text":
-                        observed.firePropertyChange("mensajeChat", "", json);
+                        observed.firePropertyChange("mensajeChatText", "", json);
                         break;
 
                     case "imagen":
+                        
+                    try {
+                        byte[] data = Base64.getDecoder().decode(json.get("imgB64").toString());
+                        BufferedImage img = (BufferedImage) ImageIO.read(new ByteArrayInputStream(data));
+                        ImageIcon imgIcon = new ImageIcon(img);
+                        observed.firePropertyChange("mensajeChatImg", imgIcon, json);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                        break;
+                    break;
                 }
                 break;
 

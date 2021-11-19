@@ -111,7 +111,7 @@ public class Lobby extends javax.swing.JFrame implements PropertyChangeListener 
 
     private HashMap<String, BtnWaitingRoom> HMbtnWaitingRoom = new HashMap();
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(PropertyChangeEvent evt) {        
         jsonWR = (JSONObject) evt.getNewValue();
         switch (jsonWR.getString("type")) {
             case "CreateWaitingRoom":

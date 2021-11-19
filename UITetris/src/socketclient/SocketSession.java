@@ -185,7 +185,7 @@ public class SocketSession extends Thread {
             oos.writeObject(obj);
             oos.close();
             String b64 = Base64.getEncoder().encodeToString(baos.toByteArray());
-            observed.firePropertyChange("socketSession", "mensaje", obj.toString());
+//            observed.firePropertyChange("socketSession", "mensaje", obj.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

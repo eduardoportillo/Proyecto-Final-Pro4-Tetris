@@ -1,8 +1,9 @@
-    package ventanas;
+package ventanas;
 
 import chat.Mensaje;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.beans.PropertyChangeEvent;
@@ -16,7 +17,9 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import listas.ListaMensajes;
 import org.json.JSONObject;
@@ -31,10 +34,12 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     private String WRId;
     private int posY = 10;
     private int oldSize = 0;
+    private WaitingRoomChat instance;
 
     public WaitingRoomChat(String WRId) {
         initComponents();
         this.WRId = WRId;
+        instance = this;
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
@@ -263,22 +268,26 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
     }//GEN-LAST:event_TFMensajeKeyPressed
 
     private void enviarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarImagenActionPerformed
-//        JFileChooser fileChooser = new JFileChooser();
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "jpeg", "png");
-//        fileChooser.addChoosableFileFilter(filter);
-//        fileChooser.setFileFilter(filter);
-//        int seleccion = fileChooser.showOpenDialog(sendMensajePanel);
-//
-//        File abreimg = fileChooser.getSelectedFile();
-//        try {
-//            byte[] filecont = Files.readAllBytes(abreimg.toPath());
-//            String b64 = Base64.getEncoder().encodeToString(filecont);
-//            Mensaje msn = new Mensaje("@", b64);
-//            ListaMensajes.setMensaje(msn);
-//            SocketSession.getInstance("mensaje").sendObject(msn);
-//        } catch (Exception Exception) {
-//            System.out.println(Exception);
-//        }
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "jpeg", "png");
+        fileChooser.addChoosableFileFilter(filter);
+        fileChooser.setFileFilter(filter);
+        int seleccion = fileChooser.showOpenDialog(instance);
+
+        File abreimg = fileChooser.getSelectedFile();
+
+        try {
+            byte[] filecont = Files.readAllBytes(abreimg.toPath());
+            String ImgB64 = Base64.getEncoder().encodeToString(filecont);
+            JSONObject jsonSendImg = new JSONObject();
+            jsonSendImg.put("type", "Chat");
+            jsonSendImg.put("mensajeType", "imagen");
+            jsonSendImg.put("WRid", this.WRId);
+            jsonSendImg.put("imgB64", ImgB64);
+            SocketSession.getInstance("mensaje").sendString(jsonSendImg.toString());
+        } catch (Exception Exception) {
+            System.out.println(Exception);
+        }
     }//GEN-LAST:event_enviarImagenActionPerformed
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
@@ -359,7 +368,7 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                     PanelMensajes.add(mps, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, posY, -1, -1));
                     mps.getMensajeMP().setFont(new Font("Serif", Font.BOLD, 20));
                     mps.getMensajeMP().setForeground(Color.red);
-                    
+
                     try {
                         if (i == 0) {
                             mps.getMensajeMP().setText("El Juego esta por iniciar...");
@@ -390,9 +399,32 @@ public class WaitingRoomChat extends javax.swing.JFrame implements PropertyChang
                         mp.getNameUserMP().setText(jsonWRC.get("nameJugador").toString());
                         mp.getMensajeMP().setText(jsonWRC.get("mensajeChat").toString());
                         mp.getDateMP().setText(jsonWRC.get("horaEnvio").toString());
-                        posY += 120;
+                        posY += 140;
 
                         break;
+                    case "imagen":
+                        ImageIcon II = (ImageIcon) evt.getOldValue();
+                        Image imgIbyI= II.getImage();
+                        MensajePanel mpImg = new MensajePanel();
+                        
+                        if (jsonWRC.get("nameJugador").toString().equals(Client.getNameClienteSesion())) {
+                            PanelMensajes.add(mpImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, posY, -1, -1));
+                        } else {
+                            PanelMensajes.add(mpImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, posY, -1, -1));
+                        }
+                        
+                        Image newimg = imgIbyI.getScaledInstance(280, 200,  java.awt.Image.SCALE_SMOOTH);
+                        ImageIcon imageIcon = new ImageIcon(newimg);
+                        
+                        mpImg.getMensajeMP().setIcon(imageIcon);
+                        mpImg.getNameUserMP().setText(jsonWRC.get("nameJugador").toString());
+                        mpImg.getDateMP().setText(jsonWRC.get("horaEnvio").toString());
+                        
+                        posY+=320;
+                        PanelMensajes.repaint();
+                        
+                        break;
+
                 }
                 break;
 

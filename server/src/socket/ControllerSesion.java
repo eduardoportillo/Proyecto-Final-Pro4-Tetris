@@ -2,6 +2,7 @@ package socket;
 
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
@@ -76,12 +77,17 @@ public class ControllerSesion {
                 sendMensajeText.put("mensajeChat", json.get("mensajeChat"));
                 sendMensajeText.put("nameJugador", WRChat.HMSessions.get(sesion.getKey()).getSesionName());
                 sendMensajeText.put("horaEnvio", formatter.format(date));
-                WRChat.HMSessions.forEach((k,v) ->  v.sendString(sendMensajeText.toString()));
-                
+                WRChat.HMSessions.forEach((k, v) -> v.sendString(sendMensajeText.toString()));
+
                 break;
 
             case "imagen":
-
+                WaitingRoom WRChatByImg = Lobby.getInstance().HMWaitingRoom.get(json.get("WRid"));
+                json.put("nameJugador", WRChatByImg.HMSessions.get(sesion.getKey()).getSesionName());
+                json.put("horaEnvio", formatter.format(date));
+                // System.out.println(json.get("imgB64"));
+                
+                WRChatByImg.HMSessions.forEach((k, v) -> v.sendString(json.toString()));
                 break;
             }
             break;
